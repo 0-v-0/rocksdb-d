@@ -1,7 +1,7 @@
 module rocksdb.env;
 
 extern (C) {
-  struct rocksdb_env_t {};
+  struct rocksdb_env_t;
 
   void rocksdb_env_set_background_threads(rocksdb_env_t*, int);
   void rocksdb_env_set_high_priority_background_threads(rocksdb_env_t*, int);
@@ -16,11 +16,11 @@ class Env {
   rocksdb_env_t* env;
 
   this() {
-    this.env = rocksdb_create_default_env();
+    env = rocksdb_create_default_env();
   }
 
   this(rocksdb_env_t* env) {
-    this.env = env;
+    env = env;
   }
 
   static Env createMemoryEnv() {
@@ -28,18 +28,18 @@ class Env {
   }
 
   ~this() {
-    rocksdb_env_destroy(this.env);
+    rocksdb_env_destroy(env);
   }
 
   void joinAll() {
-    rocksdb_env_join_all_threads(this.env);
+    rocksdb_env_join_all_threads(env);
   }
 
   @property backgroundThreads(int n) {
-    rocksdb_env_set_background_threads(this.env, n);
+    rocksdb_env_set_background_threads(env, n);
   }
 
   @property highPriorityBackgroundThreads(int n) {
-    rocksdb_env_set_high_priority_background_threads(this.env, n);
+    rocksdb_env_set_high_priority_background_threads(env, n);
   }
 }
